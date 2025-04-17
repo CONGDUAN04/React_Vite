@@ -5,7 +5,7 @@ import TodoNew from "./components/todo/TodoNew";
 import reactLogo from "./assets/react.svg";
 import { useState } from "react";
 const App = () => {
-  const [todoList, setTodos] = useState([
+  const [todoList, setTodoList] = useState([
     { id: 1, name: "Learning React " },
     { id: 2, name: "Watching YouTuBe " },
   ]);
@@ -16,8 +16,17 @@ const App = () => {
     country: "VietNam",
   };
   const addNewToDo = (name) => {
-    alert(`call me ${name}`);
+    const newTodo = {
+      id: functionrandomIntFromInterval(1, 1000000),
+      name: name,
+    };
+    setTodoList([...todoList, newTodo]);
   };
+  const functionrandomIntFromInterval = (min, max) => {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
   return (
     <div className="todo-container">
       <div className="todo-title">Todo List</div>

@@ -6,7 +6,7 @@ const TodoNew = (props) => {
   const { addNewToDo } = props;
   // addNewToDo();
   const handleClick = () => {
-    console.log("<<< check valueInput: ", valueInput);
+    addNewToDo(valueInput);
   };
   const handOnChange = (name) => {
     setValueInput(name);
