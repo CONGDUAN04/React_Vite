@@ -1,76 +1,41 @@
-import { Space, Table, Tag } from "antd";
-const UserTable = () => {
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Table } from "antd";
+import UpdateUserModal from "./update.user.modal";
+const UserTable = (props) => {
+  const { dataUsers } = props;
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <a>{text}</a>,
+      title: "Id",
+      dataIndex: "_id",
+      render: (_, record) => {
+        return <a href="#">{record._id}</a>;
+      },
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "Full Name",
+      dataIndex: "fullName",
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      title: "Email",
+      dataIndex: "email",
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
+        <div style={{ display: "flex", gap: "20px" }}>
+          <EditOutlined style={{ cursor: "pointer", color: "orange" }} />
+          <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+        </div>
       ),
     },
   ];
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-  ];
-  return <Table columns={columns} dataSource={data} />;
+
+  return (
+    <>
+      <Table columns={columns} dataSource={dataUsers} rowKey={"_id"} />
+      <UpdateUserModal />
+    </>
+  );
 };
 export default UserTable;

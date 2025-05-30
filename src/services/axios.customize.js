@@ -1,7 +1,7 @@
 import axios from "axios";
 // Set config defaults when creating the instance
 const instance = axios.create({
-  baseURL: "http://localhost:8080", // undefined
+  baseURL: import.meta.env.VITE_BACKEND_URL, // undefined
 });
 // instance.interceptors.request.use(
 //   function (config) {
@@ -25,6 +25,7 @@ instance.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if (error.response && error.response.data) return error.response.data;
     return Promise.reject(error);
   }
 );
