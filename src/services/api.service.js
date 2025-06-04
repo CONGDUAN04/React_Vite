@@ -20,8 +20,30 @@ const updateUserAPI = (_id, fullName, phone) => {
   };
   return axios.put(URL_BACKEND, data);
 };
+const deleteUserAPI = (id) => {
+  const URL_BACKEND = `/api/v1/user/${id}`;
+  return axios.delete(URL_BACKEND);
+};
 const fetchAllUserAPI = () => {
   const URL_BACKEND = "/api/v1/user";
   return axios.get(URL_BACKEND);
 };
-export { createUserAPI, updateUserAPI, fetchAllUserAPI };
+const handleUploadFile = (file, folder) => {
+  const URL_BACKEND = `/api/v1/file/uplload`;
+  let config = {
+    headers: {
+      "upload-type": folder,
+      "Content-Type": "multipart/form-data",
+    },
+  };
+  const bodyFormData = new FormData();
+  bodyFormData.append("fileImg", file);
+  return axios.post(URL_BACKEND, bodyFormData, config);
+};
+export {
+  createUserAPI,
+  handleUploadFile,
+  updateUserAPI,
+  fetchAllUserAPI,
+  deleteUserAPI,
+};
