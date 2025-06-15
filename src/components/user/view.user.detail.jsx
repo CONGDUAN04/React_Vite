@@ -1,11 +1,15 @@
-import { Button, Drawer } from "antd";
+import { Button, Drawer, notification } from "antd";
 import { useState } from "react";
-import { handleUploadFile } from "../../services/api.service";
+import {
+  handleUploadFile,
+  updateUserAvatarAPI,
+} from "../../services/api.service";
 
 const ViewUserDetail = (props) => {
-  const { dataDetail, setDataDetail, openDetail, setOpenDetail } = props;
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState();
+  const { dataDetail, setDataDetail, openDetail, setOpenDetail, loadUser } =
+    props;
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const handleOnchangeFile = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(null);
@@ -21,7 +25,37 @@ const ViewUserDetail = (props) => {
   const handleUpdateUserAvatar = async () => {
     //steps 1: upload file
     const resUpload = await handleUploadFile(selectedFile, "avatar");
-    console.log("<<<Check reUpload", resUpload);
+    if (resUpload.data) {
+      /// success
+      const newAvatar = resUpload.data.fileUploaded;
+      //step 2: update user
+      const resUpdateAvatar = await updateUserAvatarAPI(
+        newAvatar,
+        dataDetail._id,
+        dataDetail.fullName,
+        dataDetail.phone
+      );
+      if (resUpdateAvatar.data) {
+        setOpenDetail(false);
+        setSelectedFile(null);
+        setPreview(null); // reset preview
+        await loadUser(); // reload user data
+        notification.success({
+          message: "Update User Avatar",
+          description: "CẬP NHẬT AVATAR USER THÀNH CÔNG",
+        });
+      } else {
+        notification.error({
+          message: "Error upload file",
+          description: JSON.stringify(resUpdateAvatar.message),
+        });
+      }
+    } else {
+      notification.error({
+        message: "Error upload file",
+        description: JSON.stringify(resUpload.message),
+      });
+    }
   };
   return (
     <Drawer

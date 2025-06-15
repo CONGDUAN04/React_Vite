@@ -1,4 +1,5 @@
 //import axios from "axios";
+import { Avatar } from "antd";
 import axios from "./axios.customize";
 
 const createUserAPI = (fullName, email, password, phone) => {
@@ -29,7 +30,7 @@ const fetchAllUserAPI = () => {
   return axios.get(URL_BACKEND);
 };
 const handleUploadFile = (file, folder) => {
-  const URL_BACKEND = `/api/v1/file/uplload`;
+  const URL_BACKEND = `/api/v1/file/upload`;
   let config = {
     headers: {
       "upload-type": folder,
@@ -40,10 +41,21 @@ const handleUploadFile = (file, folder) => {
   bodyFormData.append("fileImg", file);
   return axios.post(URL_BACKEND, bodyFormData, config);
 };
+const updateUserAvatarAPI = (avatar, _id, fullName, phone) => {
+  const URL_BACKEND = "/api/v1/user";
+  const data = {
+    avatar: avatar,
+    _id: _id,
+    fullName: fullName,
+    phone: phone,
+  };
+  return axios.put(URL_BACKEND, data);
+};
 export {
   createUserAPI,
   handleUploadFile,
   updateUserAPI,
   fetchAllUserAPI,
   deleteUserAPI,
+  updateUserAvatarAPI,
 };
