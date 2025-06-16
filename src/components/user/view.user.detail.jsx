@@ -64,7 +64,10 @@ const ViewUserDetail = (props) => {
       onClose={() => {
         setDataDetail(null);
         setOpenDetail(false);
+        setPreview("");
       }}
+      maskClosable={false}
+      destroyOnClose={true}
       open={openDetail}
     >
       {dataDetail ? (

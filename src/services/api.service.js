@@ -25,8 +25,8 @@ const deleteUserAPI = (id) => {
   const URL_BACKEND = `/api/v1/user/${id}`;
   return axios.delete(URL_BACKEND);
 };
-const fetchAllUserAPI = () => {
-  const URL_BACKEND = "/api/v1/user";
+const fetchAllUserAPI = (current, pageSize) => {
+  const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
   return axios.get(URL_BACKEND);
 };
 const handleUploadFile = (file, folder) => {
