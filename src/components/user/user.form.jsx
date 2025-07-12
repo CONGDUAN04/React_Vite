@@ -1,4 +1,4 @@
-import { Button, Input, notification, Modal } from "antd";
+import { Button, Input, notification, Modal, message } from "antd";
 import { useState } from "react";
 import { createUserAPI } from "../../services/api.service";
 
@@ -13,16 +13,14 @@ const UserForm = (props) => {
   const handleSubmitBtn = async () => {
     const res = await createUserAPI(fullName, email, password, phone);
     if (res.data) {
-      notification.success({
-        message: "Create user",
-        description: "TẠO USER THÀNH CÔNG",
+      message.success({
+        content: "Create user successfully",
       });
       resetAndCloseModal();
       await loadUser();
     } else {
-      notification.error({
-        message: "Error create user",
-        description: JSON.stringify(res.message),
+      message.error({
+        content: "Create user failed, please try again later",
       });
     }
   };

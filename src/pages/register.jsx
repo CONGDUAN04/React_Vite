@@ -1,13 +1,22 @@
-// Regx and check for email and phone number
-import { Button, Col, Form, Input, notification, Row } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  notification,
+  Row,
+  Typography,
+  Card,
+} from "antd";
 import { registerUserAPI } from "../services/api.service";
 import { useNavigate } from "react-router-dom";
+
 const RegisterPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
   const onFinish = async (values) => {
     console.log(">>>check value:", values);
-    //// Call API to register user
     const res = await registerUserAPI(
       values.fullName,
       values.email,
@@ -16,88 +25,107 @@ const RegisterPage = () => {
     );
     if (res.data) {
       notification.success({
-        message: "Register User",
-        description: "ĐĂNG KÝ USER THÀNH CÔNG",
+        message: "Đăng ký thành công",
+        description: "Tài khoản đã được tạo!",
       });
       navigate("/login");
     } else {
       notification.error({
-        message: "Error register user",
+        message: "Lỗi đăng ký",
         description: JSON.stringify(res.message),
       });
     }
   };
+
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      name="basic"
-      onFinish={onFinish}
-      style={{ margin: "10px" }}
-      // onFinishFailed={onFinishFailed}
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#f5f5f5",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "20px",
+      }}
     >
-      <Row justify={"center"}>
-        <Col xs={24} md={6}>
+      <Card
+        title={
+          <Typography.Title
+            level={2}
+            style={{ textAlign: "center", margin: 0 }}
+          >
+            Đăng ký tài khoản
+          </Typography.Title>
+        }
+        bordered={false}
+        style={{
+          width: "100%",
+          maxWidth: 500,
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          borderRadius: "12px",
+        }}
+      >
+        <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
             label="Full Name"
             name="fullName"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[
+              { required: true, message: "Please input your full name!" },
+            ]}
           >
-            <Input />
+            <Input placeholder="Nguyễn Văn A" />
           </Form.Item>
-        </Col>
-      </Row>
 
-      <Row justify={"center"}>
-        <Col xs={24} md={6}>
           <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
+            rules={[
+              { required: true, message: "Please input your email!" },
+              { type: "email", message: "Email không hợp lệ!" },
+            ]}
           >
-            <Input />
+            <Input placeholder="example@email.com" />
           </Form.Item>
-        </Col>
-      </Row>
 
-      <Row justify={"center"}>
-        <Col xs={24} md={6}>
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Please input your password!" },
+              { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+            ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="••••••" />
           </Form.Item>
-        </Col>
-      </Row>
 
-      <Row justify={"center"}>
-        <Col xs={24} md={6}>
           <Form.Item
             label="Phone Number"
             name="phone"
             rules={[
+              { required: true, message: "Please input your phone number!" },
               {
-                required: true,
-                pattern: new RegExp(/\d+/g),
-                message: "Wrong format!",
+                pattern: /^\d{10,11}$/,
+                message: "Số điện thoại không hợp lệ!",
               },
             ]}
           >
-            <Input />
+            <Input placeholder="0123456789" />
           </Form.Item>
-        </Col>
-      </Row>
-
-      <Row justify={"center"}>
-        <Col xs={24} md={6}>
-          <Button onClick={() => form.submit()} type="primary">
-            Register
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+              Đăng ký
+            </Button>
+          </Form.Item>
+          <Form.Item style={{ textAlign: "center", marginTop: 10 }}>
+            <span>Bạn đã có tài khoản? </span>
+            <a onClick={() => navigate("/login")} style={{ color: "#1890ff" }}>
+              Đăng nhập
+            </a>
+          </Form.Item>
+        </Form>
+      </Card>
+    </div>
   );
 };
+
 export default RegisterPage;
