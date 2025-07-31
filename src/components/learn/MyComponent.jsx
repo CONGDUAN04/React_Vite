@@ -15,7 +15,6 @@ const MyComponent = () => {
   return (
     <>
       <div>{JSON.stringify(hoidanit)} & Duan & hoidanit</div>
-      <div>{console.log("ERIC")}</div>
       <div className="child" style={{ borderRadius: "10px" }}>
         Child
       </div>
