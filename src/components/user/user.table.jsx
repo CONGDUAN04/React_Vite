@@ -92,7 +92,7 @@ const UserTable = ({
     {
       title: "Actions",
       key: "action",
-      width: 180,
+      width: 150,
       render: (_, record) => (
         <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
           <Tooltip title="View Details">

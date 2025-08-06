@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { Menu } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, message, notification } from "antd";
 import { useContext, useState } from "react";
 import {
   UsergroupAddOutlined,
@@ -9,15 +9,35 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { AuthContext } from "../context/auth.context";
+import { logoutAPI } from "../../services/api.service";
 
 const Header = () => {
   const [current, setCurrent] = useState("");
-  const { user, logout } = useContext(AuthContext); // Assuming `logout` is available
+  const navigate = useNavigate();
+  const { user, setUser, logout } = useContext(AuthContext); // Assuming `logout` is available
 
   const onClick = (e) => {
     setCurrent(e.key);
     if (e.key === "logout") {
       logout(); // Gọi hàm logout nếu người dùng click
+    }
+  };
+  const handLogout = async () => {
+    const res = await logoutAPI();
+    if (res.data) {
+      // clear user data and token
+      localStorage.removeItem("access_token");
+      setUser({
+        email: "",
+        phone: "",
+        fullName: "",
+        role: "",
+        avatar: "",
+        id: "",
+      });
+      message.success("Đăng xuất thành công");
+      //redirect to home
+      navigate("/");
     }
   };
 
@@ -37,7 +57,7 @@ const Header = () => {
       key: "books",
       icon: <AuditOutlined />,
     },
-    ...(!user?.id
+    ...(!user.id
       ? [
           {
             label: <Link to={"/login"}>Login</Link>,
@@ -46,18 +66,20 @@ const Header = () => {
             style: { marginLeft: "auto" },
           },
         ]
-      : [
+      : []),
+    ...(user.id
+      ? [
           {
             label: `Welcome ${user.fullName}`,
             key: "welcome",
             style: { marginLeft: "auto", cursor: "default" },
           },
           {
-            label: <Link to={"/login"}>Logout</Link>,
+            label: <span onClick={() => handLogout()}> Đăng xuất</span>,
             key: "logout",
-            icon: <LogoutOutlined />,
           },
-        ]),
+        ]
+      : []),
   ];
 
   return (

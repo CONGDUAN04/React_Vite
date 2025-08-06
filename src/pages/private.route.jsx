@@ -19,7 +19,7 @@ const PrivateRoute = (props) => {
       extra={
         <Button type="primary">
           <Link to="/">
-            <span>Back To HomePage</span>
+            <span>Back To Home Page</span>
           </Link>
         </Button>
       }

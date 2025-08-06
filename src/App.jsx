@@ -20,7 +20,6 @@ const App = () => {
     if (res.data) {
       //success
       setUser(res.data.user);
-      console.log(" Check User data:", res.data);
     }
     setIsAppLoading(false); // Set loading to false after fetching user info
   };
